@@ -10,9 +10,14 @@ app.get('/',
         console.log(req.body);
         console.log("Get request received");
 
+        let prefix = "Mr."
+        if (req.body.gender == "female") {
+            prefix = "Ms."
+        }
+
         res.json(
             {
-                message: "Get request successful"
+                message: "Hello " + prefix + " " + req.body.name
             }
         );
     }

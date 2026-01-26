@@ -1,10 +1,15 @@
 import express from 'express';
+import mongoose from 'mongoose';
 
 const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
+
+const connectionString = "REMOVED_MONGODB_URI";
   
+mongoose.connect(connectionString);
+
 app.get('/', 
     (req, res) => {
         console.log(req.body);

@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import Student from './models/student.js';
 
 const app = express();
 
@@ -7,8 +8,17 @@ const app = express();
 app.use(express.json());
 
 const connectionString = "REMOVED_MONGODB_URI";
-  
-mongoose.connect(connectionString);
+ 
+mongoose.connect(connectionString).then(
+    () => {
+        console.log("Connected to database");
+    }
+).catch(
+    (error) => {
+       console.error("Database connection failed:", error.message);
+    }
+);
+
 
 app.get('/', 
     (req, res) => {
@@ -29,9 +39,32 @@ app.get('/',
 );
 
 app.post('/',  
-    () => {
-        console.log("Post request received");
-    }   
+    (req,res) => {
+        const student = new Student(
+            {
+                name: req.body.name,
+                age: req.body.age,
+                city: req.body.city
+            }
+        );
+        student.save().then(
+            () => {
+                res.json(
+                    {
+                        message: "Student created successfully"
+                    }
+                );
+            }
+        ).catch(
+            (error) => {
+                res.json(
+                    {
+                        message: "Creating student failed: " + error.message
+                    }
+                );
+            }
+        );
+    }
 );
 
 app.delete('/', 

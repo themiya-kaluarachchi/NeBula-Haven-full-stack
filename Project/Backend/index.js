@@ -27,19 +27,15 @@ mongoose.connect(connectionString, {
 
 app.get('/', 
     (req, res) => {
-        console.log(req.body);
-        console.log("Get request received");
-
-        let prefix = "Mr."
-        if (req.body.gender == "female") {
-            prefix = "Ms."
-        }
-
-        res.json(
-            {
-                message: "Hello " + prefix + " " + req.body.name
+        Student.find().then(
+            (data)=> {
+                res.json(data);
             }
-        );
+        ).catch(
+            (error) => {
+                console.error("Error retrieving students:", error);
+            }
+        );    
     }
 );
 

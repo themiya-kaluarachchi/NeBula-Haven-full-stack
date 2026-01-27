@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import Student from './models/student.js';
+import studentRouter from './routes/studentRouter.js';
 
 
 
@@ -24,55 +25,8 @@ mongoose.connect(connectionString, {
     }
 );
 
+app.use('/students', studentRouter);
 
-app.get('/', 
-    (req, res) => {
-        Student.find().then(
-            (data)=> {
-                res.json(data);
-            }
-        ).catch(
-            (error) => {
-                console.error("Error retrieving students:", error);
-            }
-        );    
-    }
-);
-
-app.post('/',  
-    (req,res) => {
-        const student = new Student(
-            {
-                name: req.body.name,
-                age: req.body.age,
-                city: req.body.city
-            }
-        );
-        student.save().then(
-            () => {
-                res.json(
-                    {
-                        message: "Student created successfully"
-                    }
-                );
-            }
-        ).catch(
-            (error) => {
-                res.json(
-                    {
-                        message: "Creating student failed: " + error.message
-                    }
-                );
-            }
-        );
-    }
-);
-
-app.delete('/', 
-    () => {
-        console.log("Delete request received");
-    }   
-);
 
 app.listen(5000, 
     () => {

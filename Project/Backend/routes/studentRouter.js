@@ -1,29 +1,11 @@
 import express from 'express';
+import Student from '../models/student.js';
+import { createStudent, getStudent } from '../controllers/studentController.js';
 
 const studentRouter = express.Router();
 
-studentRouter.get('/', 
-    () => {
-        console.log("GET request into student router");
-    }
-);
+studentRouter.get('/', getStudent);
 
-studentRouter.post('/', 
-    () => {
-        console.log("POST request into student router");
-    }
-);
-
-studentRouter.delete('/', 
-    () => {
-        console.log("DELETE request into student router");
-    }
-);
-
-studentRouter.put('/', 
-    () => {
-        console.log("PUT request into student router");
-    }
-);
+studentRouter.post('/', createStudent);
 
 export default studentRouter;

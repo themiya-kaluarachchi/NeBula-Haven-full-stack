@@ -2,20 +2,25 @@ import express from 'express';
 import mongoose from 'mongoose';
 import Student from './models/student.js';
 
+
+
 const app = express();
 
 // Middleware to parse JSON bodies
 app.use(express.json());
 
 const connectionString = "REMOVED_MONGODB_URI";
+
  
-mongoose.connect(connectionString).then(
+mongoose.connect(connectionString, {
+    serverSelectionTimeoutMS: 5000
+}).then(
     () => {
         console.log("Connected to database");
     }
 ).catch(
     (error) => {
-       console.error("Database connection failed:", error.message);
+       console.error("Database connection failed:", error);
     }
 );
 

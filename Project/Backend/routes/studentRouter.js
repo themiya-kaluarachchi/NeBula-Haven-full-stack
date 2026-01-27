@@ -25,3 +25,5 @@ studentRouter.put('/',
         console.log("PUT request into student router");
     }
 );
+
+export default studentRouter;

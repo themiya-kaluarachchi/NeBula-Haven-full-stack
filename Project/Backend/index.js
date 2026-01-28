@@ -3,8 +3,6 @@ import mongoose from 'mongoose';
 import studentRouter from './routes/studentRouter.js';
 import userRouter from './routes/userRouter.js';
 
-
-
 const app = express();
 
 // Middleware to parse JSON bodies

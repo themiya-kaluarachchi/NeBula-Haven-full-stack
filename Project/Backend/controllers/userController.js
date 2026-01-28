@@ -53,7 +53,7 @@ export function loginUser(req, res) {
                             role: user.role,
                             isEmailVerified: user.isEmailVerified
                         },
-                        "jwt secret"
+                        "jwt-secret"
                     )
 
                     res.json(

@@ -1,6 +1,6 @@
 import User from "../models/user.js";
 
-function createUser(req, res) {
+export function createUser(req, res) {
     const user = new User(
         req.body
     );

@@ -70,26 +70,23 @@ function getUsers(dbPassword) {
     return myPromise;
 }
 
-// getUsers("123").then(
-//     (users) => {
-//         console.log(users);
-//     }
-// ).catch (
-//     (error) => {
-//         console.log(error);
-//     }
-// )
-
-async function fetchUsers() {
-    try {
-        let users = await getUsers("123");
+getUsers("123").then(
+    (users) => {
         console.log(users);
-        console.log("Users fetched successfully.");
-    } catch (error) {
-        console.log(error);
-        console.log("Failed to fetch users.");
     }
+).catch (
+    (error) => {
+        console.log(error);
+    }
+)
 
-}
 
-fetchUsers();
+// try {
+//     let users = await getUsers("123");
+//     console.log(users);
+//     console.log("Users fetched successfully.");
+// } catch (error) {
+//     console.log(error);
+//     console.log("Failed to fetch users.");
+// }
+

@@ -1,13 +1,19 @@
 import Student from "../models/student.js";
 
-export function getStudent(req, res) {
-  Student.find()
-    .then((data) => {
-      res.json(data);
-    })
-    .catch((error) => {
-      console.error("Error retrieving students:", error);
-    });
+export async function getStudent(req, res) {
+  
+  try {
+    const students = await Student.find();
+    res.json(students);
+  } catch (error) {
+    res.status(500).json(
+      {
+         message: "Failed to retrieve students: " + error.message
+      }
+    );
+  }
+  
+
 }
 
 export function createStudent(req, res) {

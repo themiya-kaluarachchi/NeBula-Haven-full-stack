@@ -80,5 +80,16 @@ function getUsers(dbPassword) {
 //     }
 // )
 
-let response = await getUsers("123");
-console.log(response);
+async function fetchUsers() {
+    try {
+        let users = await getUsers("123");
+        console.log(users);
+        console.log("Users fetched successfully.");
+    } catch (error) {
+        console.log(error);
+        console.log("Failed to fetch users.");
+    }
+
+}
+
+fetchUsers();

@@ -25,7 +25,7 @@ app.use(
                         )
                         return;
                     } else {
-                        req.userData = decoded; 
+                        req.user = decoded; 
                     }
                 }
             ) 

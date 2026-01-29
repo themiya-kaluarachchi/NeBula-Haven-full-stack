@@ -11,6 +11,25 @@ export function getStudent(req, res) {
 }
 
 export function createStudent(req, res) {
+
+  if(req.user == null) {
+    res.status(401).json(
+      {
+        message : "Authentication required"
+      }
+    )
+    return;
+  }
+
+  if (req.user.role != "admin") {
+    res.status(403).json(
+      {
+        message: "Authorization required: Admins only",
+      }
+    );
+    return;
+  }
+
   const student = new Student({
     name: req.body.name,
     age: req.body.age,

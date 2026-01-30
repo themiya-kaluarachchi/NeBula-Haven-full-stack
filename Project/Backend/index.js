@@ -1,6 +1,5 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import studentRouter from './routes/studentRouter.js';
 import userRouter from './routes/userRouter.js';
 import jwt from 'jsonwebtoken';
 import productRouter from './routes/productRouter.js';
@@ -52,7 +51,6 @@ mongoose.connect(connectionString, {
     }
 );
 
-app.use('/students', studentRouter);
 app.use('/users', userRouter);
 app.use('/products', productRouter);
 

@@ -127,3 +127,31 @@ export async function updateProduct(req, res) {
         );
     }
 }
+
+export async function getProductsById(req, res) {
+    try {
+        const productID = req.params.productID;
+        const product = await Product.findOne(
+            {
+                productID: productID
+            }
+        )
+
+        if(product == null) {
+            res.status(404).json(
+                {
+                    message : "Product not found"
+                }
+            );
+        } else {
+            res.json(product);
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(
+            {
+                message : "Failed to retrieve product: " + error.message
+            }
+        );
+    }
+}

@@ -95,3 +95,35 @@ export async function deleteProduct(req, res) {
         );
     }
 }
+
+export async function updateProduct(req, res) {
+    if(!isAdmin(req)) {
+        res.status(403).json({
+            message: "You are not authorized to perform this action"
+        });
+        return;
+    }
+
+    try {
+        const productID = req.params.productID;
+        const updateData = req.body;
+
+        await Product.updateOne(
+            { productID: productID },
+              updateData 
+        );
+
+        res.json(
+            {
+                message : "Product updated successfully"
+            }
+        )
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(
+            {
+                message : "Failed to update product: " + error.message
+            }
+        );
+    }
+}

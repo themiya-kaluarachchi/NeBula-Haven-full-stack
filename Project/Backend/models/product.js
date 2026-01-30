@@ -33,7 +33,11 @@ const productShema = new mongoose.Schema(
         labelledPrice : {
             type : Number,
             required : true
-        }
+        },
+        category : {
+            type : String,
+            required : true
+        },
     }
 )
 

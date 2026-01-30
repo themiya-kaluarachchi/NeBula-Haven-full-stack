@@ -62,3 +62,36 @@ export async function getProducts(req, res) {
         );
     }
 }
+
+export async function deleteProduct(req, res) {
+
+    if(!isAdmin(req)) {
+        res.status(403).json({
+            message: "You are not authorized to perform this action"
+        });
+        return;
+    }
+
+    try {
+        const productID = req.params.productID;
+
+        await Product.deleteOne(
+            { 
+                productID: productID 
+            }
+        );
+
+        res.json(
+            {
+                message : "Product deleted successfully"
+            }
+        )
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(
+            {
+                message : "Failed to delete product: " + error.message
+            }
+        );
+    }
+}

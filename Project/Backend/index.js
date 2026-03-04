@@ -3,8 +3,11 @@ import mongoose from 'mongoose';
 import userRouter from './routes/userRouter.js';
 import jwt from 'jsonwebtoken';
 import productRouter from './routes/productRouter.js';
+import cors from "cors";
+
 
 const app = express();
+app.use(cors());
 
 // Middleware to parse JSON bodies
 app.use(express.json());

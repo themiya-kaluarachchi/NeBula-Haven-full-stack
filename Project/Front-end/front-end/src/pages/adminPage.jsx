@@ -4,6 +4,7 @@ import { BsCart4 } from "react-icons/bs";
 import { FiCodesandbox, FiUsers } from "react-icons/fi";
 import { FaChartLine } from "react-icons/fa";
 import AdminProductPage from "./admin/adminProductPage";
+import AdminAddNewProduct from "./admin/adminAddNewProduct";
 
 export default function AdminPage() {
   return (
@@ -50,6 +51,7 @@ export default function AdminPage() {
             <Route path="products" element={<AdminProductPage />} />
             <Route path="orders" element={<h1>Orders</h1>} />
             <Route path="users" element={<h1>Users</h1>} />
+            <Route path="add-product" element={<AdminAddNewProduct />} />
           </Routes>
         </div>
       </div>

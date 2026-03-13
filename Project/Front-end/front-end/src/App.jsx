@@ -11,15 +11,14 @@ function App() {
   return (
     <BrowserRouter>
       <div className="w-full h-[100vh]">
-        <Toaster position="top-right"/>
-        <Routes path="/">
-          <Route path="/*" element={<HomePage />} />
+        <Toaster position="top-right" />
+        <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/register" element={<h1>Register Page</h1>} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/*" element={<AdminPage />} />
           <Route path="/test" element={<TestPage />} />
         </Routes>
-
       </div>
     </BrowserRouter>
   );

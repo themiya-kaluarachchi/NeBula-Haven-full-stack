@@ -33,13 +33,14 @@ export default function AdminProductPage() {
           {/* Table Head */}
           <thead className="bg-accent text-white">
             <tr className="text-left">
-              <th className="p-4">Image</th>
-              <th className="p-4">Product ID</th>
-              <th className="p-4">Product Name</th>
-              <th className="p-4">Price</th>
-              <th className="p-4">Labelled Price</th>
-              <th className="p-4">Category</th>
-              <th className="p-4 text-center">Actions</th>
+              <th className=" sticky top-0 z-10 p-4">Image</th>
+              <th className=" sticky top-0 z-10 p-4">Product ID</th>
+              <th className=" sticky top-0 z-10 p-4">Product Name</th>
+              <th className=" sticky top-0 z-10 p-4">Price</th>
+              <th className=" sticky top-0 z-10 p-4">Labelled Price</th>
+              <th className=" sticky top-0 z-10 p-4">Stock</th>
+              <th className=" sticky top-0 z-10 p-4">Category</th>
+              <th className=" sticky top-0 z-10 p-4 text-center">Actions</th>
             </tr>
           </thead>
 
@@ -71,6 +72,10 @@ export default function AdminProductPage() {
                     Rs. {item.labelledPrice}
                   </td>
 
+                  <td className="p-4 text-gray-500">
+                     {item.stock}
+                  </td>
+
                   <td className="p-4">
                     <span className="px-3 py-1 text-xs rounded-full bg-accent/10 text-accent font-medium">
                       {item.category}
@@ -88,7 +93,11 @@ export default function AdminProductPage() {
                       <button className="p-2 rounded-lg hover:bg-accent/10 transition">
                         <BiSolidEdit 
                             className="text-gray-600 hover:text-accent" 
-                            onClick={() => navigate("/admin/update-product")}
+                            onClick={() =>{
+                                navigate("/admin/update-product", {
+                                    state : item
+                                })
+                            }}
                         />
                       </button>
                     </div>

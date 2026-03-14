@@ -1,24 +1,26 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import mediaUpload from "../../utils/mediaUpload";
 import toast from "react-hot-toast";
 import axios from "axios";
 
 export default function AdminUpdateProduct() {
 
-    const [productId, setProductId] = useState("");
-    const [name, setName] = useState("");
-    const [altNames, setAltNames] = useState("");
-    const [description, setDescription] = useState("");
+    const location = useLocation();
+
+    const [productId, setProductId] = useState(location.state?.productID || "");
+    const [name, setName] = useState(location.state?.name || "");
+    const [altNames, setAltNames] = useState(location.state?.altNames?.join(",") || "");
+    const [description, setDescription] = useState(location.state?.description || "");
     const [images, setImages] = useState([]);
-    const [price, setPrice] = useState(0);
-    const [labelledPrice, setLabelledPrice] = useState(0);
-    const [category, setCategory] = useState("cream");
-    const [stock, setStock] = useState(0);
+    const [price, setPrice] = useState(location.state?.price || 0);
+    const [labelledPrice, setLabelledPrice] = useState(location.state?.labelledPrice || 0);
+    const [category, setCategory] = useState(location.state?.category || "cream");
+    const [stock, setStock] = useState(location.state?.stock || 0);
 
     const navigate = useNavigate();
 
-    async function addProduct() {
+    async function updateProduct() {
          const token = localStorage.getItem("token");
          if(token == null) {
             navigate("/login");
@@ -30,7 +32,12 @@ export default function AdminUpdateProduct() {
             promises[i] = mediaUpload(images[i])
          }
          try {
-            const urls = await Promise.all(promises);
+            let urls = await Promise.all(promises);
+
+            if (urls.length == 0) {
+                urls = location.state.images;
+            }
+
             const alternativeNames = altNames.split(",")
 
             const product = {
@@ -45,12 +52,12 @@ export default function AdminUpdateProduct() {
                 stock: stock
             }
 
-            await axios.post(import.meta.env.VITE_API_URL+"/api/products", product, {
+            await axios.put(import.meta.env.VITE_API_URL+"/api/products/" + productId, product, {
                 headers : {
                     Authorization: "Bearer " + token
                 }
             })
-            toast.success("Product added successfully!");
+            toast.success("Product updated successfully!");
             navigate("/admin/products");
          } catch  {
             toast.error("Ann Error Occurred")
@@ -65,9 +72,9 @@ export default function AdminUpdateProduct() {
                 
                 {/* Header */}
                 <div className="mb-8">
-                    <h2 className="text-3xl font-light text-secondary tracking-wide">Add New Product</h2>
+                    <h2 className="text-3xl font-light text-secondary tracking-wide">Update Product</h2>
                     <p className="text-sm text-secondary/60 mt-2 font-light">
-                        Enter the details for the new cosmetic item below.
+                        Enter the details for the updated cosmetic item below.
                     </p>
                 </div>
 
@@ -90,6 +97,7 @@ export default function AdminUpdateProduct() {
                     <div className="flex flex-col gap-1.5">
                         <label className="text-sm font-medium text-secondary/80 ml-1">Product ID</label>
                         <input 
+                            disabled
                             type="text" 
                             placeholder="e.g. NH-001" 
                             value={productId} 
@@ -196,7 +204,7 @@ export default function AdminUpdateProduct() {
                         Cancel
                     </button>
                     <button 
-                        onClick={addProduct} 
+                        onClick={updateProduct} 
                         className="px-8 py-3.5 bg-accent text-white font-medium rounded-4xl shadow-lg hover:shadow-accent/40 hover:bg-[#4a6352] active:scale-[0.98] transition-all duration-300"
                     >
                         Save Product

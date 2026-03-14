@@ -18,16 +18,17 @@ export default function AdminProductPage() {
 
   return (
     <div className="w-full h-full p-6 bg-primary">
-        <Link to="/admin/add-product" className="fixed right-[50px] bottom-[50px] text-3xl hover:text-accent">
-            <FiPlusCircle />
-        </Link>
-      
+      <Link
+        to="/admin/add-product"
+        className="fixed right-[50px] bottom-[50px] text-3xl hover:text-accent"
+      >
+        <FiPlusCircle />
+      </Link>
+
       {/* Card container */}
       <div className="w-full bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-
         {/* Table */}
         <table className="w-full text-sm text-secondary">
-
           {/* Table Head */}
           <thead className="bg-accent text-white">
             <tr className="text-left">
@@ -49,7 +50,6 @@ export default function AdminProductPage() {
                   key={item.productID}
                   className="border-b border-gray-200 hover:bg-primary/40 transition"
                 >
-                  
                   <td className="p-4">
                     <img
                       src={item.images[0]}
@@ -78,7 +78,6 @@ export default function AdminProductPage() {
 
                   <td className="p-4">
                     <div className="flex justify-center gap-5 text-lg">
-
                       <button className="p-2 rounded-lg hover:bg-red-100 transition">
                         <IoTrashOutline className="text-gray-600 hover:text-red-600" />
                       </button>
@@ -86,18 +85,14 @@ export default function AdminProductPage() {
                       <button className="p-2 rounded-lg hover:bg-accent/10 transition">
                         <BiSolidEdit className="text-gray-600 hover:text-accent" />
                       </button>
-
                     </div>
                   </td>
-
                 </tr>
               );
             })}
           </tbody>
-
         </table>
       </div>
-
     </div>
   );
 }

@@ -1,60 +1,39 @@
+import { createClient } from "@supabase/supabase-js";
 import React, { useState } from "react";
 
+const annonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqdnpzZmlkY2dnd3lkZ3Z2dXVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0NTM1MDAsImV4cCI6MjA4OTAyOTUwMH0.yrHfTm5sD3kku1YtGiGatuMOF3PUwEh7HLqGZYatlsI"
+const supabaseUrl = "https://sjvzsfidcggwydgvvuuf.supabase.co"
+
+const superbase = createClient(supabaseUrl, annonKey)
+
 export default function TestPage() {
-  const [count, setCount] = useState(10);
-  const [status, setStatus] = useState("Online");
+
+  const [file, setFile] = useState(null);
+
+  function uploadImage() {
+    superbase.storage.from("images").upload(file.name, file , {
+      upsert: false,
+      cacheControl: "3600",
+    }).then(
+      () => {
+        const publicUrl = superbase.storage.from("images").getPublicUrl(file.name).data.publicUrl
+        console.log(publicUrl);
+      }
+    )
+  }
 
   return (
     <div className="w-full h-full flex justify-center items-center">
-      <div className="w-[500px] h-[500px] bg-amber-100 text-white flex  flex-col justify-center items-center gap-[25px]">
-        <div className="flex justify-center items-center gap-[20px]">
-          <button
-            onClick={() => {
-              console.log("Decreasing...");
-              setCount(count - 1);
-              console.log(count);
-            }}
-            className="w-[100px] bg-accent h-[40px] rounded-lg"
-          >
-            -
-          </button>
-          <span className="text-accent text-5xl">{count}</span>
-          <button
-            onClick={() => {
-              console.log("Increasing...");
-              setCount(count + 1);
-              console.log(count);
-            }}
-            className="w-[100px] bg-accent h-[40px] rounded-lg"
-          >
-            +
-          </button>
-        </div>
-        <div className="flex flex-col justify-center items-center gap-[20px]">
-          <span className="text-accent text-5xl">{status}</span>
-
-          <div className="flex flex-row gap-[20px]">
-            <button
-              onClick={() => setStatus("Online")}
-              className="w-[100px] bg-accent h-[40px] rounded-lg"
-            >
-              Online
-            </button>
-            <button
-              onClick={() => setStatus("Offline")}
-              className="w-[100px] bg-accent h-[40px] rounded-lg"
-            >
-              Offline
-            </button>
-            <button
-              onClick={() => setStatus("Deactivated")}
-              className="w-[100px] bg-accent h-[40px] rounded-lg"
-            >
-              Deactivated
-            </button>
-          </div>
-        </div>
-      </div>
+      <input type="file" 
+        onChange={
+          (e) => {
+            setFile(e.target.files[0]);
+          }
+        }
+      />
+      <button onClick={uploadImage} className="px-4 py-2 bg-blue-500 text-white rounded-lg ml-4">
+        Upload
+      </button>
     </div>
   );
 }

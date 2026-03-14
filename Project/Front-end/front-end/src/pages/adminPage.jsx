@@ -5,6 +5,7 @@ import { FiCodesandbox, FiUsers } from "react-icons/fi";
 import { FaChartLine } from "react-icons/fa";
 import AdminProductPage from "./admin/adminProductPage";
 import AdminAddNewProduct from "./admin/adminAddNewProduct";
+import AdminUpdateProduct from "./admin/adminUpdateProduct";
 
 export default function AdminPage() {
   return (
@@ -52,6 +53,7 @@ export default function AdminPage() {
             <Route path="orders" element={<h1>Orders</h1>} />
             <Route path="users" element={<h1>Users</h1>} />
             <Route path="add-product" element={<AdminAddNewProduct />} />
+            <Route path="update-product" element={<AdminUpdateProduct />} />
           </Routes>
         </div>
       </div>

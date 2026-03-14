@@ -21,11 +21,14 @@ export default function mediaUpload(file) {
             if (file == null) {
                 reject("No file selected");
             } else {
-                superbase.storage.from("images").upload(file.name, file , {
+                const timeStamp = new Date().getTime();
+                const fileName = timeStamp+file.name;
+
+                superbase.storage.from("images").upload(fileName, file , {
                     upsert: false,
                     cacheControl: "3600",
                 }).then (() => {
-                    const publicUrl = superbase.storage.from("images").getPublicUrl(file.name).data.publicUrl;
+                    const publicUrl = superbase.storage.from("images").getPublicUrl(fileName).data.publicUrl;
                     resolve(publicUrl);
                 }).catch (
                     () => {

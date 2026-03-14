@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { FiPlusCircle } from "react-icons/fi";
 import { IoTrashOutline } from "react-icons/io5";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AdminProductPage() {
   const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -79,11 +80,16 @@ export default function AdminProductPage() {
                   <td className="p-4">
                     <div className="flex justify-center gap-5 text-lg">
                       <button className="p-2 rounded-lg hover:bg-red-100 transition">
-                        <IoTrashOutline className="text-gray-600 hover:text-red-600" />
+                        <IoTrashOutline 
+                            className="text-gray-600 hover:text-red-600" 
+                        />
                       </button>
 
                       <button className="p-2 rounded-lg hover:bg-accent/10 transition">
-                        <BiSolidEdit className="text-gray-600 hover:text-accent" />
+                        <BiSolidEdit 
+                            className="text-gray-600 hover:text-accent" 
+                            onClick={() => navigate("/admin/update-product")}
+                        />
                       </button>
                     </div>
                   </td>

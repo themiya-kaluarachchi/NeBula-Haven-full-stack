@@ -4,7 +4,7 @@ import mediaUpload from "../../utils/mediaUpload";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function AdminAddNewProduct() {
+export default function AdminUpdateProduct() {
 
     const [productId, setProductId] = useState("");
     const [name, setName] = useState("");

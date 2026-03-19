@@ -2,11 +2,27 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { BiSolidEdit } from "react-icons/bi";
 import { FiPlusCircle } from "react-icons/fi";
-import { IoTrashOutline } from "react-icons/io5";
+import { IoCloseCircle, IoTrashOutline } from "react-icons/io5";
 import { Link, useNavigate } from "react-router-dom";
+
+function ProductDeleteConfirm(props) {
+  const productId = props.productID;
+  const close = props.close;
+
+  return (
+    <div className="fixed left-0 top-0 w-full h-screen bg-[#00000050] z-[100] flex items-center justify-center">
+      <div className="w-[500px] h-[200px] bg-white relative">
+        <button onClick={close} className="absolute right-[-42px] top-[-42px] w-[40px] h-[40px] bg-red-600 hover:bg-red-700 text-white flex justify-center items-center rounded-full font-bold transition-colors">
+            <IoCloseCircle size={24} /> 
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function AdminProductPage() {
   const [products, setProducts] = useState([]);
+  const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,6 +35,10 @@ export default function AdminProductPage() {
 
   return (
     <div className="w-full h-full p-6 bg-primary">
+      {
+        isDeleteConfirmVisible && <ProductDeleteConfirm close = {() => {setIsDeleteConfirmVisible(false)}} />
+      }
+
       <Link
         to="/admin/add-product"
         className="fixed right-[50px] bottom-[50px] text-3xl hover:text-accent"
@@ -72,9 +92,7 @@ export default function AdminProductPage() {
                     Rs. {item.labelledPrice}
                   </td>
 
-                  <td className="p-4 text-gray-500">
-                     {item.stock}
-                  </td>
+                  <td className="p-4 text-gray-500">{item.stock}</td>
 
                   <td className="p-4">
                     <span className="px-3 py-1 text-xs rounded-full bg-accent/10 text-accent font-medium">
@@ -85,19 +103,22 @@ export default function AdminProductPage() {
                   <td className="p-4">
                     <div className="flex justify-center gap-5 text-lg">
                       <button className="p-2 rounded-lg hover:bg-red-100 transition">
-                        <IoTrashOutline 
-                            className="text-gray-600 hover:text-red-600" 
+                        <IoTrashOutline
+                          className="text-gray-600 hover:text-red-600"
+                          onClick= {() => {
+                            setIsDeleteConfirmVisible(true);
+                          }}
                         />
                       </button>
 
                       <button className="p-2 rounded-lg hover:bg-accent/10 transition">
-                        <BiSolidEdit 
-                            className="text-gray-600 hover:text-accent" 
-                            onClick={() =>{
-                                navigate("/admin/update-product", {
-                                    state : item
-                                })
-                            }}
+                        <BiSolidEdit
+                          className="text-gray-600 hover:text-accent"
+                          onClick={() => {
+                            navigate("/admin/update-product", {
+                              state: item,
+                            });
+                          }}
                         />
                       </button>
                     </div>

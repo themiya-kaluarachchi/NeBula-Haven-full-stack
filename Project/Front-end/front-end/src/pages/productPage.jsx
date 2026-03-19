@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import Loader from "../components/loader";
+import ProductCard from "../components/productCard";
 
 export function ProductPage() {
 
@@ -24,17 +25,15 @@ export function ProductPage() {
     }, [isLoading]);
 
     return (
-        <div className="w-full h-[calc(100vh-100px)]">
+        <div className="w-full min-h-[calc(100vh-100px)] bg-primary">
             {
                 isLoading ? <Loader />
                 :
-                <div className="w-full h-full flex">
+                <div className="w-full h-full flex flex-row flex-wrap justify-center">
                     {
                         products.map((item) => {
                             return (
-                                <div>
-                                    {item.name}
-                                </div>
+                                <ProductCard key={item.productID} product={item} />
                             )
                         })
                     }

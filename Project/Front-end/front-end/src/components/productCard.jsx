@@ -49,9 +49,8 @@ export default function ProductCard(props) {
 
         {/* Call to Action Button */}
         <Link
-          to="/overview"
+          to={"/overview/"+product.productID}
           className="block w-full text-center py-2.5 rounded-xl font-medium tracking-wide bg-primary/50 text-secondary border border-primary hover:bg-accent hover:text-white hover:border-accent transition-all duration-300 active:scale-[0.98]"
-          state={product}
         >
           View Product
         </Link>

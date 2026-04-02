@@ -44,4 +44,4 @@ const User = mongoose.model('User', userSchema);
 
 export default User;
 
-// fix 2
+// fix 3

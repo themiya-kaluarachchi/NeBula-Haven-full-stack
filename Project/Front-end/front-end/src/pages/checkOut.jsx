@@ -1,14 +1,23 @@
 import React, { useState } from "react";
-import { addToCart, getTotal, loadCart } from "../utils/cart";
 import {
   FaChevronCircleDown,
   FaChevronCircleUp,
   FaTrash,
 } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
-export default function CartPage() {
-  const [cart, setCart] = useState(loadCart());
+export default function CheckoutPage() {
+  const location = useLocation();
+
+  const [cart, setCart] = useState(location.state);
+
+  function getTotal() {
+    let total = 0;
+    cart.forEach((item) => {
+      total += item.price * item.quantity;
+    });
+    return total;
+  }
 
   return (
     <div className="w-full min-h-[calc(100vh-100px)] bg-primary px-8 py-8 flex justify-center">
@@ -16,7 +25,7 @@ export default function CartPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-semibold text-secondary tracking-tight">
-              Shopping Cart
+              Checkout
             </h1>
             <p className="text-sm text-secondary/60 mt-1">
               Review your selected products
@@ -55,8 +64,12 @@ export default function CartPage() {
                   <FaChevronCircleDown
                     className="text-[18px] text-secondary/55 cursor-pointer hover:text-accent transition"
                     onClick={() => {
-                      addToCart(item, -1);
-                      setCart(loadCart());
+                      const newCart = [...cart];
+                      if (newCart[index].quantity > 1) {
+                        newCart[index].quantity -= 1;
+                      }
+
+                      setCart(newCart);
                     }}
                   />
                   <span className="text-secondary font-semibold text-[28px] leading-none min-w-[20px] text-center">
@@ -65,8 +78,9 @@ export default function CartPage() {
                   <FaChevronCircleUp
                     className="text-[18px] text-secondary/55 cursor-pointer hover:text-accent transition"
                     onClick={() => {
-                      addToCart(item, 1);
-                      setCart(loadCart());
+                      const newCart = [...cart];
+                      newCart[index].quantity += 1;
+                      setCart(newCart);
                     }}
                   />
                 </div>
@@ -86,10 +100,7 @@ export default function CartPage() {
               <div className="shrink-0 pl-2">
                 <button
                   className="w-10 h-10 flex items-center justify-center rounded-full text-secondary/25 hover:bg-red-50 hover:text-red-400 transition"
-                  onClick={() => {
-                    addToCart(item, -item.quantity);
-                    setCart(loadCart());
-                  }}
+                  onClick={() => {}}
                 >
                   <FaTrash className="text-lg" />
                 </button>
@@ -98,21 +109,23 @@ export default function CartPage() {
           );
         })}
 
-        <div className="w-full bg-white/80 border border-accent/10 rounded-[30px] shadow-sm px-8 py-6 flex items-center justify-between">
-          <div className="flex flex-col">
-            <span className="text-sm text-secondary/60">Total Amount</span>
-            <span className="text-3xl font-semibold text-accent leading-tight">
+        <div className="w-full bg-white/85 backdrop-blur-sm border border-accent/10 rounded-[30px] shadow-md px-8 py-6 flex items-center justify-between">
+          {/* LEFT SIDE */}
+          <div className="flex flex-col gap-1">
+            <span className="text-sm text-secondary/60 tracking-wide">
+              Total Amount
+            </span>
+            <span className="text-3xl font-bold text-accent leading-tight">
               LKR {getTotal().toFixed(2)}
             </span>
           </div>
 
-          <Link
-            state={cart}
-            to="/checkout"
-            className="px-8 py-3 bg-accent text-white font-semibold rounded-full shadow-md hover:bg-accent/90 hover:scale-[1.03] active:scale-95 transition-all duration-200"
+          {/* RIGHT SIDE CTA */}
+          <button
+            className="px-10 py-3 bg-accent text-white font-semibold rounded-full shadow-lg  hover:bg-accent/90 hover:scale-[1.05] active:scale-95 transition-all duration-200 flex items-center gap-2"
           >
-            Proceed to Checkout →
-          </Link>
+            Place Order →
+          </button>
         </div>
       </div>
     </div>

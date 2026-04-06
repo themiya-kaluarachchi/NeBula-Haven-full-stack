@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { addToCart, getTotal, loadCart } from "../utils/cart";
-import { FaChevronCircleDown, FaChevronCircleUp, FaTrash } from "react-icons/fa";
+import {
+  FaChevronCircleDown,
+  FaChevronCircleUp,
+  FaTrash,
+} from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export default function CartPage() {
   const [cart, setCart] = useState(loadCart());
@@ -94,12 +99,19 @@ export default function CartPage() {
         })}
 
         <div className="w-full bg-white/80 border border-accent/10 rounded-[30px] shadow-sm px-8 py-6 flex items-center justify-between">
-          <span className="text-lg font-medium text-secondary">
-            Total Amount
-          </span>
-          <span className="text-3xl font-semibold text-accent">
-            LKR {getTotal().toFixed(2)}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-sm text-secondary/60">Total Amount</span>
+            <span className="text-3xl font-semibold text-accent leading-tight">
+              LKR {getTotal().toFixed(2)}
+            </span>
+          </div>
+
+          <Link
+            to="/checkout"
+            className="px-8 py-3 bg-accent text-white font-semibold rounded-full shadow-md hover:bg-accent/90 hover:scale-[1.03] active:scale-95 transition-all duration-200"
+          >
+            Proceed to Checkout →
+          </Link>
         </div>
       </div>
     </div>

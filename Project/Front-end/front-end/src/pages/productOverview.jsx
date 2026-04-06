@@ -4,6 +4,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import Loader from "../components/loader";
 import ImageSlider from "../components/imageSlider";
+import { addToCart, loadCart } from "../utils/cart";
 
 export default function ProductOverview() {
   const params = useParams();
@@ -109,10 +110,19 @@ export default function ProductOverview() {
 
                 {/* Action Buttons (Pushed to bottom naturally) */}
                 <div className="w-full flex flex-col sm:flex-row gap-4 mt-auto">
-                    <button className="flex-1 bg-accent text-white px-8 py-4 rounded-xl font-medium tracking-wide shadow-lg shadow-accent/30 hover:bg-[#4a6352] hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98]">
+                    <button className="flex-1 bg-accent text-white px-8 py-4 rounded-xl font-medium tracking-wide shadow-lg shadow-accent/30 hover:bg-[#4a6352] hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98]"
+                        onClick={() => {
+                            addToCart(product, 1)
+                            toast.success("Added to cart")
+                        }}
+                    >
                         Add to Cart
                     </button>
-                    <button className="flex-1 bg-white border-2 border-accent text-accent px-8 py-4 rounded-xl font-medium tracking-wide hover:bg-accent hover:text-white hover:shadow-lg hover:shadow-accent/30 hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98]">
+                    <button className="flex-1 bg-white border-2 border-accent text-accent px-8 py-4 rounded-xl font-medium tracking-wide hover:bg-accent hover:text-white hover:shadow-lg hover:shadow-accent/30 hover:-translate-y-0.5 transition-all duration-300 active:scale-[0.98]"
+                        onClick={() => {
+                            console.log(loadCart())
+                        }}
+                    >
                         Buy Now
                     </button>
                 </div>

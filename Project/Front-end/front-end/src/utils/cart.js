@@ -46,9 +46,21 @@ export function addToCart(product, quantity) {
                 }
             )
         } else {
-            existingItem.quantity = newQuantity;
+            cart[existingItemIndex].quantity = newQuantity;
         }
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+export function getTotal() {
+    const cart = loadCart()
+    let total = 0;
+
+    cart.forEach(
+        (item) => {
+            total += item.price * item.quantity
+        }
+    )
+    return total
 }

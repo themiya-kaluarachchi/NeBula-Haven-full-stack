@@ -1,3 +1,4 @@
+import { AiOutlineShoppingCart } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -12,6 +13,9 @@ export default function Header() {
                 <Link to="/about">About</Link>
                 <Link to="/contact">Contact</Link>
             </div>
+            <Link to="/cart" className="absolute right-0 top-0 h-full flex items-center justify-center px-4 text-3xl">
+                <AiOutlineShoppingCart />
+            </Link>
         </div>
     </header>
   )

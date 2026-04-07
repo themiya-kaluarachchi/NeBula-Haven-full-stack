@@ -70,7 +70,7 @@ export async function createOrder(req, res) {
             return
         }
 
-        const itemToBeAdded = []
+        const itemsToBeAdded = []
         let total = 0
 
         for (let i=0; i<itemsInRequest.length; i++) {
@@ -101,7 +101,7 @@ export async function createOrder(req, res) {
                 return
             }
 
-            itemToBeAdded.push({
+            itemsToBeAdded.push({
                 productID: product.productID,
                 quantity: item.quantity,
                 name: product.name,
@@ -114,7 +114,7 @@ export async function createOrder(req, res) {
 
         const newOrder = new Order({
             orderID : newOrderID,
-            items : itemToBeAdded,
+            items : itemsToBeAdded,
             customerName : customerName,
             email : user.email,
             phone : phone,
@@ -124,6 +124,15 @@ export async function createOrder(req, res) {
         })
 
         const savedOrder = await newOrder.save()
+
+        for (let i=0; i<itemsToBeAdded.length; i++) {
+            const item = itemsToBeAdded[i]
+            await Product.updateOne(
+                {productID: item.productID},
+                {$inc: {stock: -item.quantity}}
+            )
+        }
+
         res.status(201).json(
             {
                 message : "Order created successfully",

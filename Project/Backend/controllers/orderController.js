@@ -69,7 +69,7 @@ export async function createOrder(req, res) {
             return
         }
 
-        
+        const itemToBeAdded = []
 
         for (let i=0; i<itemsInRequest.length; i++) {
             const item = itemsInRequest[i]
@@ -96,6 +96,14 @@ export async function createOrder(req, res) {
                 )
                 return
             }
+
+            itemToBeAdded.push({
+                productID: product.productID,
+                quantity: item.quantity,
+                name: product.name,
+                price: product.labelledPrice,
+                image: product.images.length > 0 ? product.images[0] : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+            })
         }
 
         const newOrder = new Order({

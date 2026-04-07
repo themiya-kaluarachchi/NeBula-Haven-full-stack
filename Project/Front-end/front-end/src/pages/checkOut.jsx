@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import {
@@ -21,12 +22,35 @@ export default function CheckoutPage() {
     return total;
   }
 
-  function purchaseCart() {
+  async function purchaseCart() {
     const token = localStorage.getItem("token");
     if (token == null) {
         toast.error("You need to be logged in to place an order.");
         navigate("/login");
         return;
+    }
+    try {
+        const items = []
+        for (let i=0; i<cart.length; i++){
+            items.push(
+                {
+                    productID: cart[i].productID,
+                    quantity: cart[i].quantity 
+                }
+            )
+        }
+
+        const response = await axios.post(import.meta.env.VITE_API_URL + "/api/orders", {
+            address : "NO 123, Main Street, City",
+            items: items
+        },{
+            headers : {
+                Authorization: `Bearer ${token}`,
+            }
+        })
+    } catch(error) {
+        toast.error("Failed to place order");
+        console.error(error)
     }
   }
 

@@ -13,6 +13,17 @@ export async function createOrder(req, res) {
     // }
 
     try {
+
+        const user = req.user
+        if (user == null){
+            res.status(401).json(
+                {
+                    message : "Unauthorized user"
+                }
+            )
+            return
+        }
+
         const orderList = await Order.find().sort({date: -1}).limit(1)
 
         let newOrderID = "NB0000001"
@@ -28,12 +39,71 @@ export async function createOrder(req, res) {
             newOrderID = "NB" + newOrderNumberInString //"NB0000124"
         }
 
+        let customerName = req.body.customerName
+        if(customerName == null) {
+            customerName = user.firstName + " " + user.lastName
+        }
+
+        let phone = req.body.phone
+        if(phone == null) {
+            phone = "Not Provided"
+        }
+
+        const itemsInRequest = req.body.items
+
+        if(itemsInRequest == null){
+            res.status(400).json(
+                {
+                    message: "Items are required to place an order"
+                }
+            )
+            return
+        }
+
+        if (!Array.isArray(itemsInRequest)) {
+            res.status(400).json(
+                {
+                    message: "Items should be an array"
+                }
+            )
+            return
+        }
+
+        
+
+        for (let i=0; i<itemsInRequest.length; i++) {
+            const item = itemsInRequest[i]
+
+            const product = await Product.findOne({productID: item.productID})
+
+            if(product == null) {
+                res.status(400).json(
+                    {
+                        message: `Product with ID ${item.productID} not found`,
+                        productID: item.productID
+                    }
+                )
+                return
+            }
+
+            if(product.stock < item.quantity) {
+                res.status(400).json(
+                    {
+                        message: `Insufficient stock for product with ID ${item.productID}`,
+                        productID: item.productID,
+                        availableStock: product.stock
+                    }
+                )
+                return
+            }
+        }
+
         const newOrder = new Order({
             orderID : newOrderID,
             items : [],
-            customerName : req.body.customerName,
-            email : req.body.email,
-            phone : req.body.phone,
+            customerName : customerName,
+            email : user.email,
+            phone : phone,
             address : req.body.address,
             total : req.body.total,
             status : "Pending"

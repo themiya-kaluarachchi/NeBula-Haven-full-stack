@@ -40,7 +40,7 @@ export default function CheckoutPage() {
             )
         }
 
-        const response = await axios.post(import.meta.env.VITE_API_URL + "/api/orders", {
+        await axios.post(import.meta.env.VITE_API_URL + "/api/orders", {
             address : "NO 123, Main Street, City",
             items: items
         },{
@@ -48,9 +48,16 @@ export default function CheckoutPage() {
                 Authorization: `Bearer ${token}`,
             }
         })
+
+        toast.success("Order placed successfully");
+
     } catch(error) {
         toast.error("Failed to place order");
         console.error(error)
+
+        if(error.response && error.response.status === 400) {
+            toast.error(error.response.data.message)
+        }
     }
   }
 

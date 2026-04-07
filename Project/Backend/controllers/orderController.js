@@ -1,5 +1,6 @@
 import e from "express";
 import Order from "../models/order.js";
+import Product from "../models/product.js";
 
 export async function createOrder(req, res) {
 
@@ -70,6 +71,7 @@ export async function createOrder(req, res) {
         }
 
         const itemToBeAdded = []
+        let total = 0
 
         for (let i=0; i<itemsInRequest.length; i++) {
             const item = itemsInRequest[i]
@@ -79,6 +81,7 @@ export async function createOrder(req, res) {
             if(product == null) {
                 res.status(400).json(
                     {
+                        code: "PRODUCT_NOT_FOUND",
                         message: `Product with ID ${item.productID} not found`,
                         productID: item.productID
                     }
@@ -89,6 +92,7 @@ export async function createOrder(req, res) {
             if(product.stock < item.quantity) {
                 res.status(400).json(
                     {
+                        code: "INSUFFICIENT_STOCK",
                         message: `Insufficient stock for product with ID ${item.productID}`,
                         productID: item.productID,
                         availableStock: product.stock
@@ -101,19 +105,21 @@ export async function createOrder(req, res) {
                 productID: product.productID,
                 quantity: item.quantity,
                 name: product.name,
-                price: product.labelledPrice,
-                image: product.images.length > 0 ? product.images[0] : "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                price: product.price,
+                image: product.images[0]
             })
+
+            total += product.price * item.quantity
         }
 
         const newOrder = new Order({
             orderID : newOrderID,
-            items : [],
+            items : itemToBeAdded,
             customerName : customerName,
             email : user.email,
             phone : phone,
             address : req.body.address,
-            total : req.body.total,
+            total : total,
             status : "Pending"
         })
 

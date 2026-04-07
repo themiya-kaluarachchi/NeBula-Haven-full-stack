@@ -1,11 +1,12 @@
 import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, NavLink, Route, Routes } from "react-router-dom";
 import { BsCart4 } from "react-icons/bs";
 import { FiCodesandbox, FiUsers } from "react-icons/fi";
 import { FaChartLine } from "react-icons/fa";
 import AdminProductPage from "./admin/adminProductPage";
 import AdminAddNewProduct from "./admin/adminAddNewProduct";
 import AdminUpdateProduct from "./admin/adminUpdateProduct";
+import AdminOrdersPage from "./admin/adminOrders";
 
 export default function AdminPage() {
   return (
@@ -16,41 +17,73 @@ export default function AdminPage() {
           <span className="text-white text-xl ml-4">Admin Panel</span>
         </div>
 
-        <Link
+        <NavLink
           to="/admin"
-          className="w-[90%] flex items-center gap-2 px-4 rounded-lg"
+          end
+          className={({ isActive }) =>
+            `w-[90%] flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 
+    ${
+      isActive
+        ? "bg-accent text-white shadow-md"
+        : "text-secondary hover:bg-accent/10"
+    }`
+          }
         >
           <FaChartLine className="text-xl" />
           Dashboard
-        </Link>
-        <Link
+        </NavLink>
+
+        <NavLink
           to="/admin/orders"
-          className="w-[90%] flex items-center gap-2 px-4 rounded-lg"
+          className={({ isActive }) =>
+            `w-[90%] flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 
+    ${
+      isActive
+        ? "bg-accent text-white shadow-md"
+        : "text-secondary hover:bg-accent/10"
+    }`
+          }
         >
           <BsCart4 className="text-xl" />
           Orders
-        </Link>
-        <Link
+        </NavLink>
+
+        <NavLink
           to="/admin/products"
-          className="w-[90%] flex items-center gap-2 px-4 rounded-lg"
+          className={({ isActive }) =>
+            `w-[90%] flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 
+    ${
+      isActive
+        ? "bg-accent text-white shadow-md"
+        : "text-secondary hover:bg-accent/10"
+    }`
+          }
         >
           <FiCodesandbox className="text-xl" />
           Products
-        </Link>
-        <Link
+        </NavLink>
+
+        <NavLink
           to="/admin/users"
-          className="w-[90%] flex items-center gap-2 px-4 rounded-lg"
+          className={({ isActive }) =>
+            `w-[90%] flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 
+    ${
+      isActive
+        ? "bg-accent text-white shadow-md"
+        : "text-secondary hover:bg-accent/10"
+    }`
+          }
         >
           <FiUsers className="text-xl" />
           Users
-        </Link>
+        </NavLink>
       </div>
       <div className="w-[calc(100%-300px)] h-full border-[4px] border-accent rounded-[20px] overflow-hidden">
         <div className="h-full w-full max-w-full max-h-full overflow-y-scroll">
           <Routes>
             <Route path="/" element={<h1>Dashboard</h1>} />
             <Route path="products" element={<AdminProductPage />} />
-            <Route path="orders" element={<h1>Orders</h1>} />
+            <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="users" element={<h1>Users</h1>} />
             <Route path="add-product" element={<AdminAddNewProduct />} />
             <Route path="update-product" element={<AdminUpdateProduct />} />

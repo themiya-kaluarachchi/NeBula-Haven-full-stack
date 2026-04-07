@@ -73,28 +73,28 @@ export default function AdminProductPage() {
 
   useEffect(() => {
     if (isLoading) {
-        axios
-      .get(import.meta.env.VITE_API_URL + "/api/products")
-      .then((response) => {
-        console.log(response.data);
-        setProducts(response.data);
-        setIsLoading(false);
-      });
+      axios
+        .get(import.meta.env.VITE_API_URL + "/api/products")
+        .then((response) => {
+          console.log(response.data);
+          setProducts(response.data);
+          setIsLoading(false);
+        });
     }
-    
   }, [isLoading]);
 
   return (
     <div className="w-full h-full p-6 bg-primary">
-      {
-        isDeleteConfirmVisible && (
-            <ProductDeleteConfirm
-                refresh={() => {setIsLoading(true)}}
-                productID={productToDelete}
-                close={() => {
-                setIsDeleteConfirmVisible(false);
-                }}
-            />
+      {isDeleteConfirmVisible && (
+        <ProductDeleteConfirm
+          refresh={() => {
+            setIsLoading(true);
+          }}
+          productID={productToDelete}
+          close={() => {
+            setIsDeleteConfirmVisible(false);
+          }}
+        />
       )}
 
       <Link
@@ -103,6 +103,23 @@ export default function AdminProductPage() {
       >
         <FiPlusCircle />
       </Link>
+
+      {/* HEADER */}
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-3xl font-semibold text-secondary tracking-tight">
+            Product Management
+          </h1>
+          <p className="text-sm text-secondary/60 mt-1">
+            Manage all products, update details, and control inventory.
+          </p>
+        </div>
+
+        {/* PRODUCT COUNT */}
+        <span className="px-4 py-1.5 rounded-full bg-white/80 text-secondary text-sm font-medium border border-accent/10 shadow-sm">
+          {products.length} Products
+        </span>
+      </div>
 
       {/* Card container */}
       <div className="w-full bg-primary rounded-2xl shadow-lg border border-gray-200 overflow-hidden">

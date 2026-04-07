@@ -1,4 +1,6 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { IoCloseCircle } from "react-icons/io5";
 
 export default function OrderDetailsModal({
@@ -7,7 +9,34 @@ export default function OrderDetailsModal({
   refresh,
   isModelOpen,
 }) {
+  const [currentStatus, setCurrentStatus] = useState(null);
+
   if (!isModelOpen || !selectedOrder) return null;
+
+  const displayStatus =
+    currentStatus ?? selectedOrder.status?.toLowerCase() ?? "pending";
+
+  function getStatusClasses(status) {
+    switch (status) {
+      case "delivered":
+        return "bg-green-100 text-green-700";
+      case "shipped":
+        return "bg-blue-100 text-blue-700";
+      case "processing":
+        return "bg-yellow-100 text-yellow-700";
+      case "cancelled":
+        return "bg-red-100 text-red-700";
+      case "refunded":
+        return "bg-purple-100 text-purple-700";
+      default:
+        return "bg-accent/10 text-accent";
+    }
+  }
+
+  function formatStatus(status) {
+    if (!status) return "Pending";
+    return status.charAt(0).toUpperCase() + status.slice(1);
+  }
 
   return (
     <div
@@ -15,12 +44,12 @@ export default function OrderDetailsModal({
       onClick={closeModel}
     >
       <div
-        className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-3xl shadow-2xl relative p-6 sm:p-8"
+        className="w-full max-w-4xl max-h-[90vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden bg-white rounded-3xl shadow-2xl relative p-6 sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={closeModel}
-          className="absolute top-4 right-4 text-red-500 hover:text-red-600 transition"
+          className="absolute top-4 right-4 text-red-300 hover:text-red-400 transition"
         >
           <IoCloseCircle size={32} />
         </button>
@@ -43,9 +72,13 @@ export default function OrderDetailsModal({
           </div>
 
           <div className="bg-primary/40 rounded-2xl p-4 border border-accent/10">
-            <p className="text-xs text-secondary/60 mb-1">Status</p>
-            <span className="inline-block px-3 py-1 text-xs rounded-full bg-accent/10 text-accent font-medium">
-              {selectedOrder.status}
+            <p className="text-xs text-secondary/60 mb-2">Current Status</p>
+            <span
+              className={`inline-block px-3 py-1 text-xs rounded-full font-medium ${getStatusClasses(
+                displayStatus,
+              )}`}
+            >
+              {formatStatus(displayStatus)}
             </span>
           </div>
 
@@ -88,7 +121,9 @@ export default function OrderDetailsModal({
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-xl font-semibold text-secondary">Ordered Items</h3>
+              <h3 className="text-xl font-semibold text-secondary">
+                Ordered Items
+              </h3>
               <p className="text-sm text-secondary/60 mt-1">
                 {selectedOrder.items.length} item(s) in this order
               </p>
@@ -132,6 +167,23 @@ export default function OrderDetailsModal({
           </div>
         </div>
 
+        <div className="mb-8 bg-primary/40 rounded-2xl p-4 border border-accent/10">
+          <p className="text-sm text-secondary/60 mb-2">Update Order Status</p>
+
+          <select
+            value={displayStatus}
+            onChange={(e) => setCurrentStatus(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl bg-white border border-accent/20 text-secondary font-medium focus:outline-none focus:ring-2 focus:ring-accent/40 hover:border-accent/40 transition-all duration-200"
+          >
+            <option value="processing">Processing</option>
+            <option value="shipped">Shipped</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+            <option value="refunded">Refunded</option>
+            <option value="pending">Pending</option>
+          </select>
+        </div>
+
         <div className="border-t border-accent/10 pt-5 flex items-center justify-between">
           <div>
             <p className="text-sm text-secondary/60">Total Amount</p>
@@ -142,12 +194,27 @@ export default function OrderDetailsModal({
 
           <button
             onClick={() => {
-              if (refresh) refresh();
-              closeModel();
+              const token = localStorage.getItem("token");
+              axios
+                .put(
+                  `${import.meta.env.VITE_API_URL}/api/orders/status/${selectedOrder.orderID}`,
+                  { status: displayStatus },
+                  { headers: { Authorization: `Bearer ${token}` } },
+                )
+                .then(() => {
+                  toast.success("Order status updated successfully");
+                  refresh();
+                  closeModel();
+                })
+                .catch((error) => {
+                  console.error(error);
+                  toast.error("Failed to update order status");
+                });
             }}
+            disabled={displayStatus === selectedOrder.status?.toLowerCase()}
             className="px-6 py-3 rounded-full bg-accent text-white font-semibold hover:bg-accent/90 transition"
           >
-            Close
+            Update
           </button>
         </div>
       </div>

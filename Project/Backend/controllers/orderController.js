@@ -152,19 +152,32 @@ export async function createOrder(req, res) {
 
 
 export async function getOrders(req, res) {
+    try {
+        const user = req.user;
 
-    if(isAdmin(req)){
-        const orders = (await Order.find()).sort({date: -1})
-        res.json(orders)
-    }else if(isCustomer(req)){
-        const user = req.user
-        const orders = (await Order.find({email: user.email})).sort({date: -1})
-        res.json(orders)
-    } else {
-        res.status(403).json(
-            {
-                message : "Unauthorized user"
-            }
-        )
+        if (!user) {
+            return res.status(401).json({
+                message: "Unauthorized user",
+            });
+        }
+
+        if (isAdmin(req)) {
+            const orders = await Order.find().sort({ date: -1 });
+            return res.json(orders);
+        } 
+        else if (isCustomer(req)) {
+            const orders = await Order.find({ email: user.email }).sort({ date: -1 });
+            return res.json(orders);
+        } 
+        else {
+            return res.status(403).json({
+                message: "Unauthorized user",
+            });
+        }
+    } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.status(500).json({
+            message: "Internal server error",
+        });
     }
 }

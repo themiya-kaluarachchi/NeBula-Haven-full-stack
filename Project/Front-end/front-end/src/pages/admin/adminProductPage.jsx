@@ -207,6 +207,16 @@ export default function AdminProductPage() {
                   </tr>
                 );
               })}
+              {products.length === 0 && (
+                <tr>
+                    <td
+                        className="px-4 py-12 text-center text-secondary/60"
+                        colSpan={7}
+                    >
+                        No Products to display
+                    </td>
+                </tr>
+              )}
             </tbody>
           </table>
         )}

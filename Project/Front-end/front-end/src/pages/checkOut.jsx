@@ -1,13 +1,15 @@
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import {
   FaChevronCircleDown,
   FaChevronCircleUp,
   FaTrash,
 } from "react-icons/fa";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export default function CheckoutPage() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [cart, setCart] = useState(location.state);
 
@@ -17,6 +19,15 @@ export default function CheckoutPage() {
       total += item.price * item.quantity;
     });
     return total;
+  }
+
+  function purchaseCart() {
+    const token = localStorage.getItem("token");
+    if (token == null) {
+        toast.error("You need to be logged in to place an order.");
+        navigate("/login");
+        return;
+    }
   }
 
   return (
@@ -123,6 +134,7 @@ export default function CheckoutPage() {
           {/* RIGHT SIDE CTA */}
           <button
             className="px-10 py-3 bg-accent text-white font-semibold rounded-full shadow-lg  hover:bg-accent/90 hover:scale-[1.05] active:scale-95 transition-all duration-200 flex items-center gap-2"
+            onClick={purchaseCart}
           >
             Place Order →
           </button>

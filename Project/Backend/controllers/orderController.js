@@ -1,6 +1,7 @@
 import e from "express";
 import Order from "../models/order.js";
 import Product from "../models/product.js";
+import { isAdmin, isCustomer } from "./userController.js";
 
 export async function createOrder(req, res) {
 
@@ -144,6 +145,25 @@ export async function createOrder(req, res) {
         res.status(500).json(
             {
                 message : "Internal server error"
+            }
+        )
+    }
+}
+
+
+export async function getOrders(req, res) {
+
+    if(isAdmin(req)){
+        const orders = (await Order.find()).sort({date: -1})
+        res.json(orders)
+    }else if(isCustomer(req)){
+        const user = req.user
+        const orders = (await Order.find({email: user.email})).sort({date: -1})
+        res.json(orders)
+    } else {
+        res.status(403).json(
+            {
+                message : "Unauthorized user"
             }
         )
     }

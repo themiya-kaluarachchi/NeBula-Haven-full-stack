@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { FiPlusCircle } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Loader from "../../components/loader";
+import OrderDetailsModal from "../../components/OrderDetailsModal";
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isModelOpen, setIsModelOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   const navigate = useNavigate();
 
@@ -33,12 +35,12 @@ export default function AdminOrdersPage() {
 
   return (
     <div className="w-full h-full p-6 bg-primary">
-      <Link
-        to="/admin/add-product"
-        className="fixed right-[50px] bottom-[50px] text-3xl hover:text-accent"
-      >
-        <FiPlusCircle />
-      </Link>
+        <OrderDetailsModal
+        closeModel={() => setIsModelOpen(false)}
+        selectedOrder={selectedOrder}
+        refresh={() => setIsLoading(true)}
+        isModelOpen={isModelOpen}
+      />
 
       {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
@@ -69,13 +71,15 @@ export default function AdminOrdersPage() {
             {/* Table Head */}
             <thead className="bg-accent text-white">
               <tr className="text-left">
-                <th className=" sticky top-0 z-10 p-4">Image</th>
-                <th className=" sticky top-0 z-10 p-4">Product ID</th>
-                <th className=" sticky top-0 z-10 p-4">Product Name</th>
-                <th className=" sticky top-0 z-10 p-4">Price</th>
-                <th className=" sticky top-0 z-10 p-4">Labelled Price</th>
-                <th className=" sticky top-0 z-10 p-4">Stock</th>
-                <th className=" sticky top-0 z-10 p-4">Category</th>
+                <th className=" sticky top-0 z-10 p-4">Order ID</th>
+                <th className=" sticky top-0 z-10 p-4">Number of Items</th>
+                <th className=" sticky top-0 z-10 p-4">Customer Name</th>
+                <th className=" sticky top-0 z-10 p-4">Email</th>
+                <th className=" sticky top-0 z-10 p-4">Phone</th>
+                <th className=" sticky top-0 z-10 p-4">Address</th>
+                <th className=" sticky top-0 z-10 p-4">Total</th>
+                <th className=" sticky top-0 z-10 p-4">Status</th>
+                <th className=" sticky top-0 z-10 p-4">Date</th>
               </tr>
             </thead>
 
@@ -84,39 +88,67 @@ export default function AdminOrdersPage() {
               {orders.map((item) => {
                 return (
                   <tr
-                    key={item.productID}
-                    className="border-b border-gray-200 hover:bg-primary/40 transition"
+                    key={item.orderID}
+                    className="border-b border-gray-200 hover:bg-secondary/10 transition hover:cursor-pointer"
+                    onClick={
+                        () => {
+                            setSelectedOrder(item);
+                            setIsModelOpen(true);
+                        }
+                    }
                   >
-                    <td className="p-4">
-                      <img
-                        src={item.images[0]}
-                        alt={item.name}
-                        className="w-16 h-16 object-cover rounded-lg shadow-sm"
-                      />
+
+                    <td className="p-4 font-medium">
+                        {item.orderID}
                     </td>
 
-                    <td className="p-4 font-medium">{item.productID}</td>
-
-                    <td className="p-4">{item.name}</td>
+                    <td className="p-4 font-medium">
+                        {item.items.length}
+                    </td>
 
                     <td className="p-4 font-semibold text-secondary">
-                      Rs. {item.price}
+                      {item.customerName}
                     </td>
 
-                    <td className="p-4 text-gray-500 line-through">
-                      Rs. {item.labelledPrice}
+                    <td className="p-4 font-medium">
+                      {item.email}
                     </td>
 
-                    <td className="p-4 text-gray-500">{item.stock}</td>
+                    <td className="p-4 text-gray-500">
+                        {item.phone}
+                    </td>
+
+                    <td className="p-4 font-medium">
+                      {item.address}
+                    </td>
+
+                    <td className="p-4 font-semibold text-secondary">
+                      LKR {item.total.toFixed(2)}
+                    </td>
 
                     <td className="p-4">
                       <span className="px-3 py-1 text-xs rounded-full bg-accent/10 text-accent font-medium">
-                        {item.category}
+                        {item.status}
                       </span>
                     </td>
+
+                    <td className="p-4 font-medium">
+                      {new Date(item.date).toLocaleDateString()}
+                    </td>
+
                   </tr>
                 );
               })}
+              {orders.length === 0 && (
+                <tr>
+                    <td
+                        className="px-4 py-12 text-center text-secondary/60"
+                        colSpan={9}
+                    >
+                        No Orders to display
+                    </td>
+                </tr>
+              )}
             </tbody>
           </table>
         )}

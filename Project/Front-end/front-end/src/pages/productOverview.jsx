@@ -25,7 +25,7 @@ export default function ProductOverview() {
   }, [params.id]);
 
   return (
-    <div className="w-full min-h-[calc(100vh-100px)] text-secondary bg-primary/20 py-10 px-4 md:px-10">
+    <div className="w-full lg:h-[calc(100vh-100px)] text-secondary bg-primary py-10 px-4 md:px-10">
       {status === "loading" && (
         <div className="w-full h-[60vh] flex flex-col items-center justify-center gap-4">
           <Loader />
@@ -43,19 +43,18 @@ export default function ProductOverview() {
         </div>
       )}
 
-      <h1 className="block md:hidden text-4xl md:text-5xl font-light text-secondary leading-tight mb-2">
-        {product.name}
-      </h1>
-
       {status === "success" && product && (
-        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20 bg-primary">
           {/* Left Side: Image Slider */}
+          <h1 className="block md:hidden text-4xl md:text-5xl font-light text-secondary leading-tight mb-2">
+            {product.name}
+          </h1>
           <div className="w-full lg:w-1/2 flex items-start justify-center pt-4">
             <ImageSlider images={product.images} />
           </div>
 
           {/* Right Side: Product Details */}
-          <div className="w-full lg:w-1/2 flex flex-col pt-4 pb-12">
+          <div className="w-full h-full lg:w-1/2 flex flex-col pt-4 pb-12 bg-primary">
             {/* Meta data (Category & ID) */}
             <div className="flex items-center justify-between mb-4">
               <span className="text-[11px] font-bold text-accent uppercase tracking-widest bg-accent/10 px-3 py-1 rounded-full">

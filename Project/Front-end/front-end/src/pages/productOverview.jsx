@@ -43,6 +43,10 @@ export default function ProductOverview() {
         </div>
       )}
 
+      <h1 className="block md:hidden text-4xl md:text-5xl font-light text-secondary leading-tight mb-2">
+        {product.name}
+      </h1>
+
       {status === "success" && product && (
         <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-12 lg:gap-20">
           {/* Left Side: Image Slider */}
@@ -63,7 +67,7 @@ export default function ProductOverview() {
             </div>
 
             {/* Title & Alt Names */}
-            <h1 className="text-4xl md:text-5xl font-light text-secondary leading-tight mb-2">
+            <h1 className="text-4xl hidden md:block md:text-5xl font-light text-secondary leading-tight mb-2">
               {product.name}
             </h1>
 
